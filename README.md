@@ -10,4 +10,3 @@ Project Design of DataBase
 输入   ```git clone https://github.com/Viki1314/DataBase.git```
 
 如图二所示，DataBase文件夹图标出现“绿勾”,即github管理该文件
-
