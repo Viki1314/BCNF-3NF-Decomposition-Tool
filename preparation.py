@@ -28,7 +28,6 @@ def calculate_single_attribute_closure(original_alpha, F):
         # 结果有所改变，继续计算和比较
         alpha = result
     return result
-
 def calculate_attribute_closure_set( F ):
     """
     用来计算所有的属性闭包
@@ -48,8 +47,7 @@ def calculate_attribute_closure_set( F ):
         if [alpha,sorted(result)] not in attribute_closure_set:
             attribute_closure_set.append([alpha,sorted(result)])
     return attribute_closure_set
-
-def calculate_function_dependency_closure_set(F):
+def calculate_function_dependency_closure_set_by_attribute_closure_set(F):
     """
     此函数用来计算函数依赖集合闭包F+
     """
@@ -66,6 +64,77 @@ def get_subsets(s):
     ex.
     输入:['A','B']
     输出:[[],['A'],['B'],['A','B']]
+    #这个函数会使传入的s被修改, 需传入s.copy()
+    """
+    if not s:
+        return [[]]
+    x = s.pop()
+    subsets = get_subsets(s)
+    return subsets + [subset + [x] for subset in subsets]
+
+def reflexive_rule(R,F):
+    """
+    此函数运用Armstrong定理中的Reflexive rule来计算函数依赖闭包集合
+    """
+    new_F = F.copy()
+    for attribute in R:
+        if [[attribute],[attribute]] not in new_F:
+            new_F.append([[attribute],[attribute]])
+    return new_F
+
+def augmentation_rule(R, F):
+    """
+    此函数运用Armstrong定理中的Augmentation rule来计算函数依赖闭包集合
+    """
+    R_subsets = get_subsets(R.copy())
+    R_subsets.remove([])
+    new_F = F.copy()
+    for alpha, beta in F:
+        for subset in R_subsets:
+            augmentation_alpha = sorted(list(set(subset) | set(alpha)))
+            augmentation_beta = sorted(list(set(subset) | set(beta)))
+            if [augmentation_alpha, augmentation_beta] not in new_F:
+                new_F.append([augmentation_alpha, augmentation_beta])
+    return new_F
+
+def transitivity_rule(R, F):
+    """
+    此函数运用Armstrong定理中的Transitivity rule来计算函数依赖闭包集合
+    """
+    new_F = F.copy()
+    for alpha, beta in F:
+        for alpha_i, beta_i in F:
+            if beta == alpha_i and [alpha,beta_i] not in new_F:
+                new_F.append([alpha,beta_i])
+    return new_F
+
+def calculate_function_dependency_closure_set_by_armstrong_axioms(R,F):
+    """
+    此函数运用Armstrong定理来计算函数依赖闭包集合
+    输入 R, F
+    输出 F+
+    """
+    F = reflexive_rule(R, F)
+    F = augmentation_rule(R, F)
+    F_original = F.copy()
+    while True:
+        F = transitivity_rule(R,F)
+        if F == F_original:
+            break
+        else:
+            F_original = F
+    for i, (alpha, beta) in enumerate(F):
+        F[i] = [sorted(alpha), sorted(beta)]
+    F.sort(key=lambda x: (len(x[0]), x[0], len(x[1]), x[1]))
+    return F
+
+def get_subsets(s):
+    """
+    此函数用来计算集合的子集
+    ex.
+    输入:['A','B']
+    输出:[[],['A'],['B'],['A','B']]
+    #这个函数会使传入的s被修改, 需传入s.copy()
     """
     if not s:
         return [[]]
