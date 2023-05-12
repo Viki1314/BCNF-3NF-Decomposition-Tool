@@ -1,0 +1,4 @@
+{
+    "cpp": "cd $dir && chcp 65001 && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+    "code-runner.runInTerminal":true, "code-runner.executorMap":{ "python":"set PYTHONIOENCODING=utf8 && python ", "javascript": "I:\\software\\JavaScript\\node.exe", }
+}

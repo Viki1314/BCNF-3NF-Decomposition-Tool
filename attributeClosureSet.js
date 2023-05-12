@@ -3,24 +3,24 @@ R = ['A','B','C','D','E','F']
 F = [[['A'],['B']],[['B'],['C','D']],[['D'],['E']],[['C','E'],['F']]]
 
 /**
- * @description ç”¨äºè®¡ç®—å•ä¸ªå‚æ•°çš„å±æ€§é—­åŒ…
- * @param {array} originalAlpha - éœ€è¦è®¡ç®—é—­åŒ…çš„alpha
- * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
- * @returns {array} è¿”å›å±æ€§é—­åŒ…alpha+
+ * @description ÓÃÓÚ¼ÆËãµ¥¸ö²ÎÊıµÄÊôĞÔ±Õ°ü
+ * @param {array} originalAlpha - ĞèÒª¼ÆËã±Õ°üµÄalpha
+ * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
+ * @returns {array} ·µ»ØÊôĞÔ±Õ°üalpha+
  */
 function calculateSingleAttributeClosure(originalAlpha, F) {
-    // å¤åˆ¶åŸå§‹çš„ alpha æ•°ç»„
+    // ¸´ÖÆÔ­Ê¼µÄ alpha Êı×é
     let alpha = originalAlpha.slice();
     if (alpha.length === 0) {
       return [];
     }
-    // åˆå§‹åŒ–ç»“æœæ•°ç»„ä¸º alpha
+    // ³õÊ¼»¯½á¹ûÊı×éÎª alpha
     let result = alpha.slice();
     while (true) {
       for (let [alpha_i, beta_i] of F) {
-        // å¦‚æœ alpha_i æ˜¯ result çš„å­é›†
+        // Èç¹û alpha_i ÊÇ result µÄ×Ó¼¯
         if (alpha_i.every((value) => result.includes(value))) {
-          // å°† beta_i ä¸­ä¸åœ¨ result ä¸­çš„å…ƒç´ åŠ å…¥ result
+          // ½« beta_i ÖĞ²»ÔÚ result ÖĞµÄÔªËØ¼ÓÈë result
           for (let b of beta_i) {
             if (!result.includes(b)) {
               result.push(b);
@@ -28,11 +28,11 @@ function calculateSingleAttributeClosure(originalAlpha, F) {
           }
         }
       }
-      // å¦‚æœç»“æœä¸å†æ”¹å˜ï¼Œè¯´æ˜è®¡ç®—å®Œæˆ
+      // Èç¹û½á¹û²»ÔÙ¸Ä±ä£¬ËµÃ÷¼ÆËãÍê³É
       if (result.every((value) => alpha.includes(value))) {
         break;
       }
-      // å¦åˆ™æ›´æ–° alphaï¼Œå¹¶ç»§ç»­è®¡ç®—å’Œæ¯”è¾ƒ
+      // ·ñÔò¸üĞÂ alpha£¬²¢¼ÌĞø¼ÆËãºÍ±È½Ï
       alpha = result.slice();
     }
     return result;
@@ -42,16 +42,16 @@ closure_of_A = calculateSingleAttributeClosure(['A'],F)
 console.log('closure of A is ',closure_of_A,'\n')
 
 /**
- * @description ç”¨æ¥è®¡ç®—æ‰€æœ‰çš„å±æ€§é—­åŒ…
- * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
- * @returns {array} è¿”å›å±æ€§é—­åŒ…é›†åˆ{alpha+}
+ * @description ÓÃÀ´¼ÆËãËùÓĞµÄÊôĞÔ±Õ°ü
+ * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
+ * @returns {array} ·µ»ØÊôĞÔ±Õ°ü¼¯ºÏ{alpha+}
  */
 function calculateAttributeClosureSet(F) {
-    // to store all attribute closures ç”¨ä¸å­˜å‚¨æ‰€æœ‰çš„å±æ€§é—­åŒ…
+    // to store all attribute closures ÓÃÓë´æ´¢ËùÓĞµÄÊôĞÔ±Õ°ü
     let attributeClosureSet = [];
     for (let [alpha, beta] of F) {
         let result = calculateSingleAttributeClosure(alpha, F);
-        // to eliminate duplicate attribute closure è‹¥å±æ€§é—­åŒ…æœªé‡å¤ï¼Œåˆ™æ·»åŠ 
+        // to eliminate duplicate attribute closure ÈôÊôĞÔ±Õ°üÎ´ÖØ¸´£¬ÔòÌí¼Ó
         let isDuplicate = attributeClosureSet.some(
             ([alphaSet, alphaClosureSet]) =>
                 alphaSet.join("") === alpha.join("") &&
@@ -76,9 +76,9 @@ console.log('\n')
 
 
 /**
- * @description é€šè¿‡å±æ€§é—­åŒ…é›†åˆé—´æ¥åœ°å¾—åˆ°å‡½æ•°ä¾èµ–é—­åŒ…é›†åˆ
- * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
- * @returns {array} è¿”å›å‡½æ•°ä¾èµ–é—­åŒ…é›†åˆ{F+}
+ * @description Í¨¹ıÊôĞÔ±Õ°ü¼¯ºÏ¼ä½ÓµØµÃµ½º¯ÊıÒÀÀµ±Õ°ü¼¯ºÏ
+ * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
+ * @returns {array} ·µ»Øº¯ÊıÒÀÀµ±Õ°ü¼¯ºÏ{F+}
  */
 function calculateFunctionDependencyClosureSetByAttributeClosureSet(F) {
   functionClosureSet = [];
