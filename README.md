@@ -38,3 +38,7 @@ git pull
 ![Image2_load2](./readme_Image/load2.png "load2")
 ———————————————————————————————————
 ## 算法文件algorithm.js
+
+## 3NF部分的js算法文件ThreeNF.js
+2023.05.16已导入（v1.0）  
+该文件上半部分为preparation，下半部分为3NF的算法实现。  
