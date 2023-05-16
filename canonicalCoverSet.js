@@ -67,15 +67,16 @@ console.log('function dependency union test',functionDependencyUnion([[['A'],['B
  * @param {array} s - 需要计算子集的集合
  * @returns {array} 返回s的所有子集的集合
  */
-function getSubsets(s) {
-    s = s.slice(); // 创建原数组的一个浅拷贝
-    if (!s.length) {
-      return [[]];
-    }
-    const x = s.pop();
-    const subsets = getSubsets(s);
-    return [...subsets, ...subsets.map(subset => subset.concat(x))];
+function getSubsets(s){
+  if (s.length === 0){
+    return [[]];
   }
+  s = s.slice();
+  const x = s.pop();
+  const subsets = getSubsets(s);
+  subsetsWithX = subsets.map(subset => subset.concat(x));
+  return [...subsets, ...subsetsWithX];
+}
 
 /**
  * @description 此函数用来计算s的真子集
@@ -83,48 +84,62 @@ function getSubsets(s) {
  * @returns {array} 返回s的所有真子集的集合
  */
 function getProperSubsets(s){
-    elementToRemove = s.slice();
-    s = s.slice();
-    subsets = getSubsets(s);
-    properSubset = subsets.filter(item => {return JSON.stringify(item) !== JSON.stringify(elementToRemove)});
-    return properSubset;
+  s = s.slice();
+  subsets = getSubsets(s);
+  properSubsets = subsets.filter(subset => {return JSON.stringify(subset) !== JSON.stringify(s)});
+  return properSubsets;
 }
+
+
+/**
+ * @description 此函数用来判断['A']是不是['A','B']的子集
+ * @param {array} listA - A list
+ * @param {array} listB - B list
+ * @returns {bool} 如果A为B的子集，返回true; 反之返回false 
+ */
+function isSubset(listA, listB) {
+  if(listA.length===0){
+    return true;
+  }
+  return listA.every(elem => listB.includes(elem));
+}
+
 
 /**
  * @description 用于计算单个参数的属性闭包
- * @param {array} originalAlpha - 需要计算闭包的alpha
+ * @param {array} alpha - 需要计算闭包的alpha
  * @param {array} F - 函数依赖集合
  * @returns {array} 返回属性闭包alpha+
  */
-function calculateSingleAttributeClosure(originalAlpha, F) {
-    // 复制原始的 alpha 数组
-    let alpha = originalAlpha.slice();
-    if (alpha.length === 0) {
-      return [];
-    }
-    // 初始化结果数组为 alpha
-    let result = alpha.slice();
-    while (true) {
-      for (let [alpha_i, beta_i] of F) {
-        // 如果 alpha_i 是 result 的子集
-        if (alpha_i.every((value) => result.includes(value))) {
-          // 将 beta_i 中不在 result 中的元素加入 result
-          for (let b of beta_i) {
-            if (!result.includes(b)) {
-              result.push(b);
-            }
+function calculateSingleAttributeClosure(alpha, F) {
+  // 复制原始的 alpha 数组
+  alpha = alpha.slice();
+  if (alpha.length === 0) {
+    return [];
+  }
+  // 初始化结果数组为 alpha
+  let result = alpha.slice();
+  while (true) {
+    for (let [alpha_i, beta_i] of F) {
+      // 如果 alpha_i 是 result 的子集
+      if (isSubset(alpha_i,result)) {
+        // 将 beta_i 中不在 result 中的元素加入 result
+        for (let b of beta_i) {
+          if (!result.includes(b)) {
+            result.push(b);
           }
         }
       }
-      // 如果结果不再改变，说明计算完成
-      if (result.every((value) => alpha.includes(value))) {
-        break;
-      }
-      // 否则更新 alpha，并继续计算和比较
-      alpha = result.slice();
     }
-    return result;
+    // 如果结果不再改变，说明计算完成
+    if (isSubset(result,alpha)) {
+      break;
+    }
+    // 否则更新 alpha，并继续计算和比较
+    alpha = result.slice();
   }
+  return result;
+}
 
 
 /**

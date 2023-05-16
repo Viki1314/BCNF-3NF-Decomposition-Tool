@@ -7,19 +7,32 @@ F = [[['A'],['B']],[['B'],['C','D']],[['D'],['E']],[['C','E'],['F']]]
  * @param {array} s - 需要计算子集的集合
  * @returns {array} 返回s的所有子集的集合
  */
-function getSubsets(s) {
-    s = s.slice(); // 创建原数组的一个浅拷贝
-    if (!s.length) {
-      return [[]];
-    }
-    const x = s.pop();
-    const subsets = getSubsets(s);
-    return [...subsets, ...subsets.map(subset => subset.concat(x))];
+function getSubsets(s){
+  if (s.length === 0){
+    return [[]];
   }
+  s = s.slice();
+  const x = s.pop();
+  const subsets = getSubsets(s);
+  subsetsWithX = subsets.map(subset => subset.concat(x));
+  return [...subsets, ...subsetsWithX];
+}
 
 //测试，求['A','B']的子集
 subsets = getSubsets(['A','B']);
 console.log(subsets,'\n');
+
+
+/**
+ * @description 此函数用来判断例如[['A'],['B']]是不是[[['A'],['B']],[['B'],['C']]]的子集
+ * @param {array} item - F中的item
+ * @param {array} F - 函数依赖集合
+ * @returns {bool} 如果为的子集，返回true; 反之返回false 
+ */
+function reflexiveItem_is_subset_of_newF(item, F){
+  return F.some(subArr => JSON.stringify(subArr) === JSON.stringify(item))
+
+}
 
 /**
  * @description 此函数通过reflexive rule来计算F+
@@ -28,36 +41,31 @@ console.log(subsets,'\n');
  * @returns {array} 返回应用reflexive rule后的F+
  */
 function reflexiveRule(R, F) {
-    const newF = [...F];
-    for (const attribute of R) {
-      if (!newF.some(([alpha, beta]) => alpha.includes(attribute) && beta.includes(attribute))) {
-        newF.push([[attribute], [attribute]]);
-      }
+  const newF = [...F];
+  for (const attribute of R) {
+    reflexiveItem = [[attribute],[attribute]];
+    if (! reflexiveItem_is_subset_of_newF(reflexiveItem,newF)) {
+      newF.push([[attribute], [attribute]]);
     }
-    return newF;
   }
+  return newF;
+}
 
 //测试reflexive rule
 F_new = reflexiveRule(R,F)
 console.log('F+ after reflexive rule',F_new,'\n')
 
+
 /**
- * @description 此函数用来判断两个array是否相等
- * @param {array} arr1 - array1
- * @param {array} arr2 - array2
- * @returns {bool} 相等返回true，不相等返回false
+ * @description 此函数用来判断例如[['A'],['B']]是不是[[['A'],['B']],[['B'],['C']]]的子集
+ * @param {array} item - F中的item
+ * @param {array} F - 函数依赖集合
+ * @returns {bool} 如果为的子集，返回true; 反之返回false 
  */
-function arraysEqual(arr1, arr2) {
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
+function augmentItem_is_subset_of_newF(item, F){
+  return F.some(subArr => JSON.stringify(subArr) === JSON.stringify(item))
+
+}
 
 /**
  * @description 此函数通过augmentation rule来计算F+
@@ -66,14 +74,17 @@ function arraysEqual(arr1, arr2) {
  * @returns {array} 返回应用augmentation rule后的F+
  */
 function augmentationRule(R, F) {
+    //求R的非空子集
     const RSubsets = getSubsets(R).filter(subset => subset.length > 0);
     const newF = F.slice();
     for (const [alpha, beta] of F) {
       for (const subset of RSubsets) {
         const augmentationAlpha = [...new Set([...subset, ...alpha])].sort();
         const augmentationBeta = [...new Set([...subset, ...beta])].sort();
-        if (!newF.some(([a, b]) => arraysEqual(a, augmentationAlpha) && arraysEqual(b, augmentationBeta))) {
-          newF.push([augmentationAlpha, augmentationBeta]);
+        const augmentItem = [augmentationAlpha, augmentationBeta];
+        //如果augmentItem不在newF中
+        if (!augmentItem_is_subset_of_newF(augmentItem,newF)){
+          newF.push(augmentItem);
         }
       }
     }
@@ -86,6 +97,32 @@ F = [[['A'],['B']]]
 F_new = augmentationRule(R,F)
 console.log('F+ after augmentation rule',F_new,'\n')
 
+
+/**
+ * @description 此函数用来判断['A']是不是['A','B']的子集
+ * @param {array} listA - A list
+ * @param {array} listB - B list
+ * @returns {bool} 如果A为B的子集，返回true; 反之返回false 
+ */
+function isArraySubset(listA, listB) {
+  if(listA.length===0){
+    return true;
+  }
+  return listA.every(elem => listB.includes(elem));
+}
+
+
+/**
+ * @description 此函数用来判断例如[['A'],['B']]是不是[[['A'],['B']],[['B'],['C']]]的子集
+ * @param {array} item - F中的item
+ * @param {array} F - 函数依赖集合
+ * @returns {bool} 如果为的子集，返回true; 反之返回false 
+ */
+function transitiveItem_is_subset_of_newF(item, F){
+  return F.some(subArr => JSON.stringify(subArr) === JSON.stringify(item))
+
+}
+
 /**
  * @description 此函数通过transitiviry rule来计算F+
  * @param {array} R - 关系模式
@@ -96,8 +133,11 @@ function transitivityRule(R, F) {
     const newF = [...F];
     for (const [alpha, beta] of F) {
       for (const [alpha_i, beta_i] of F) {
-        if (beta.every((attr) => alpha_i.includes(attr)) && !newF.some(([a, b]) => a.join() === alpha.join() && b.join() === beta_i.join())) {
-          newF.push([alpha, beta_i]);
+        if (isArraySubset(beta,alpha_i) && isArraySubset(alpha_i,beta)){
+          const transitiveItem = [alpha, beta_i];
+          if (! transitiveItem_is_subset_of_newF(transitiveItem, newF)){
+            newF.push(transitiveItem);
+          }
         }
       }
     }
@@ -109,6 +149,7 @@ R = ['A','B','C']
 F = [[['A'],['B']],[['B'],['C']]]
 F_new = transitivityRule(R,F)
 console.log('F+ after transitivity rule ',F_new,'\n')
+
 
 /**
  * @description 此函数通过Armstrong Axiom来计算F+
@@ -133,9 +174,11 @@ function calculateFunctionDependencyClosureSetByArmstrongAxioms(R, F){
     }
 
 //测试Armstrong axioms
-R = ['A','B','C']
-F = [[['A'],['B']],[['B'],['C']]]
+R = ['A','B','C','G','H','I']
+F = [[['A'],['B']], [['A'],['C']], [['C','G'],['H']], [['C','G'],['I']], [['B'],['H']]]
 F_new = calculateFunctionDependencyClosureSetByArmstrongAxioms(R,F)
-console.log('F+ after ArmstrongAxioms ',F_new,'\n') 
+for (let i in F_new){
+  console.log(F_new[i]);
+}
 
 

@@ -3,24 +3,37 @@ R = ['A','B','C','D','E','F']
 F = [[['A'],['B']],[['B'],['C','D']],[['D'],['E']],[['C','E'],['F']]]
 
 /**
- * @description ÓÃÓÚ¼ÆËãµ¥¸ö²ÎÊıµÄÊôĞÔ±Õ°ü
- * @param {array} originalAlpha - ĞèÒª¼ÆËã±Õ°üµÄalpha
- * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
- * @returns {array} ·µ»ØÊôĞÔ±Õ°üalpha+
+ * @description æ­¤å‡½æ•°ç”¨æ¥åˆ¤æ–­['A']æ˜¯ä¸æ˜¯['A','B']çš„å­é›†
+ * @param {array} listA - A list
+ * @param {array} listB - B list
+ * @returns {bool} å¦‚æœAä¸ºBçš„å­é›†ï¼Œè¿”å›true; åä¹‹è¿”å›false 
  */
-function calculateSingleAttributeClosure(originalAlpha, F) {
-    // ¸´ÖÆÔ­Ê¼µÄ alpha Êı×é
-    let alpha = originalAlpha.slice();
+function isSubset(listA, listB) {
+  if(listA.length===0){
+    return true;
+  }
+  return listA.every(elem => listB.includes(elem));
+}
+
+/**
+ * @description ç”¨äºè®¡ç®—å•ä¸ªå‚æ•°çš„å±æ€§é—­åŒ…
+ * @param {array} alpha - éœ€è¦è®¡ç®—é—­åŒ…çš„alpha
+ * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
+ * @returns {array} è¿”å›å±æ€§é—­åŒ…alpha+
+ */
+function calculateSingleAttributeClosure(alpha, F) {
+    // å¤åˆ¶åŸå§‹çš„ alpha æ•°ç»„
+    alpha = alpha.slice();
     if (alpha.length === 0) {
       return [];
     }
-    // ³õÊ¼»¯½á¹ûÊı×éÎª alpha
+    // åˆå§‹åŒ–ç»“æœæ•°ç»„ä¸º alpha
     let result = alpha.slice();
     while (true) {
       for (let [alpha_i, beta_i] of F) {
-        // Èç¹û alpha_i ÊÇ result µÄ×Ó¼¯
-        if (alpha_i.every((value) => result.includes(value))) {
-          // ½« beta_i ÖĞ²»ÔÚ result ÖĞµÄÔªËØ¼ÓÈë result
+        // å¦‚æœ alpha_i æ˜¯ result çš„å­é›†
+        if (isSubset(alpha_i,result)) {
+          // å°† beta_i ä¸­ä¸åœ¨ result ä¸­çš„å…ƒç´ åŠ å…¥ result
           for (let b of beta_i) {
             if (!result.includes(b)) {
               result.push(b);
@@ -28,11 +41,11 @@ function calculateSingleAttributeClosure(originalAlpha, F) {
           }
         }
       }
-      // Èç¹û½á¹û²»ÔÙ¸Ä±ä£¬ËµÃ÷¼ÆËãÍê³É
-      if (result.every((value) => alpha.includes(value))) {
+      // å¦‚æœç»“æœä¸å†æ”¹å˜ï¼Œè¯´æ˜è®¡ç®—å®Œæˆ
+      if (isSubset(result,alpha)) {
         break;
       }
-      // ·ñÔò¸üĞÂ alpha£¬²¢¼ÌĞø¼ÆËãºÍ±È½Ï
+      // å¦åˆ™æ›´æ–° alphaï¼Œå¹¶ç»§ç»­è®¡ç®—å’Œæ¯”è¾ƒ
       alpha = result.slice();
     }
     return result;
@@ -41,24 +54,31 @@ function calculateSingleAttributeClosure(originalAlpha, F) {
 closure_of_A = calculateSingleAttributeClosure(['A'],F)
 console.log('closure of A is ',closure_of_A,'\n')
 
+
 /**
- * @description ÓÃÀ´¼ÆËãËùÓĞµÄÊôĞÔ±Õ°ü
- * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
- * @returns {array} ·µ»ØÊôĞÔ±Õ°ü¼¯ºÏ{alpha+}
+ * @description æ­¤å‡½æ•°ç”¨æ¥åˆ¤æ–­ä¾‹å¦‚[['A'],['B']]æ˜¯ä¸æ˜¯[[['A'],['B']],[['B'],['C']]]çš„å­é›†
+ * @param {array} item - Fä¸­çš„item
+ * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
+ * @returns {bool} å¦‚æœä¸ºçš„å­é›†ï¼Œè¿”å›true; åä¹‹è¿”å›false 
+ */
+function isInAttributeClosureSet(item, attributeClosureSet){
+  return attributeClosureSet.some(subArr => JSON.stringify(subArr) === JSON.stringify(item))
+}
+
+
+/**
+ * @description ç”¨æ¥è®¡ç®—æ‰€æœ‰çš„å±æ€§é—­åŒ…
+ * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
+ * @returns {array} è¿”å›å±æ€§é—­åŒ…é›†åˆ{alpha+}
  */
 function calculateAttributeClosureSet(F) {
-    // to store all attribute closures ÓÃÓë´æ´¢ËùÓĞµÄÊôĞÔ±Õ°ü
+    // to store all attribute closures ç”¨ä¸å­˜å‚¨æ‰€æœ‰çš„å±æ€§é—­åŒ…
     let attributeClosureSet = [];
     for (let [alpha, beta] of F) {
         let result = calculateSingleAttributeClosure(alpha, F);
-        // to eliminate duplicate attribute closure ÈôÊôĞÔ±Õ°üÎ´ÖØ¸´£¬ÔòÌí¼Ó
-        let isDuplicate = attributeClosureSet.some(
-            ([alphaSet, alphaClosureSet]) =>
-                alphaSet.join("") === alpha.join("") &&
-                alphaClosureSet.join("") === result.join("")
-        );
-        if (!isDuplicate) {
-            attributeClosureSet.push([alpha, result]);
+        // to eliminate duplicate attribute closure è‹¥å±æ€§é—­åŒ…æœªé‡å¤ï¼Œåˆ™æ·»åŠ 
+        if (! isInAttributeClosureSet([alpha,result],attributeClosureSet)){
+          attributeClosureSet.push([alpha,result]);
         }
     }
     return attributeClosureSet;
@@ -74,11 +94,13 @@ for (let [alpha, alphaClosure] of attributeClosureSet) {
 }
 console.log('\n')
 
+console.log('F is',F,'\n');
+
 
 /**
- * @description Í¨¹ıÊôĞÔ±Õ°ü¼¯ºÏ¼ä½ÓµØµÃµ½º¯ÊıÒÀÀµ±Õ°ü¼¯ºÏ
- * @param {array} F - º¯ÊıÒÀÀµ¼¯ºÏ
- * @returns {array} ·µ»Øº¯ÊıÒÀÀµ±Õ°ü¼¯ºÏ{F+}
+ * @description é€šè¿‡å±æ€§é—­åŒ…é›†åˆé—´æ¥åœ°å¾—åˆ°å‡½æ•°ä¾èµ–é—­åŒ…é›†åˆ
+ * @param {array} F - å‡½æ•°ä¾èµ–é›†åˆ
+ * @returns {array} è¿”å›å‡½æ•°ä¾èµ–é—­åŒ…é›†åˆ{F+}
  */
 function calculateFunctionDependencyClosureSetByAttributeClosureSet(F) {
   functionClosureSet = [];
