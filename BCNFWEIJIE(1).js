@@ -3,11 +3,11 @@ function check_NontrivialDependencyCaseViolationOfBCNF(s, schemaR, F) {
       检查不常用（non-trivial）依赖s是否导致不符合BCNF
       :param s: F中的一个在schemaR上的非平凡依赖;ex:[['A'],['B']]
       schemaR: list,表的属性;ex:['A','B','C','D','E','F']
-      :return:boolean,True:符合BC范式；False：违背BC范式
+      :return:boolean,Truvare:符合BC范式；False：违背BC范式
     */
   
-    let s_plus_set = new Set(calculate_single_attribute_closure(s[0], F));
-    let R_set = new Set(schemaR);
+    var s_plus_set = new Set(calculate_single_attribute_closure(s[0], F));
+    var R_set = new Set(schemaR);
   
     return R_set.issubset(s_plus_set);
   }
@@ -37,7 +37,7 @@ function get_nontrival(dependency) {
     :param dependency: 函数依赖集（3-dimension list）
     :return: 非平凡依赖集，3-dimension list
     */
-    let result = [];
+    var result = [];
     for (let i of dependency) {
       if (!new Set(i[1]).issubset(new Set(i[0]))) {
         result.push(i);
@@ -48,8 +48,8 @@ function get_nontrival(dependency) {
 
 
   function BCNF() {
-    let result = [this.R];
-    let done = false;
+    var result = [this.R];
+    var done = false;
     let test = 0;
     let step = { 'root': this.R };
     let decompose_times = 0;
