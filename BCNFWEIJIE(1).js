@@ -99,3 +99,21 @@ function get_nontrival(dependency) {
     }
     return [result, step];
   }
+  var R = [];
+  var length = 4
+  for (var i =1;i<length;i++){
+      R.push(i);
+  }
+  var F = [[[1],[2]],[[2],[3]]];
+  // answer：[[2, 3], [1, 2]]
+  // for (i in F){
+  //     console.log(i,F[i]);
+  // }
+  // console.log(R);
+  // console.log(F);
+  
+  var bcnf = BCNF(R,F,true);
+  var result = bcnf[0];
+  var step = bcnf[1];
+  console.log(result);
+  console.log(step);
