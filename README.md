@@ -43,6 +43,8 @@ git pull
 2023.05.16已导入（v1.0）  
 该文件上半部分为preparation，下半部分为3NF的算法实现。  
 
+2023/5/19：所有js函数已整合进 'DataBase\miniprogram-8\algorithm.js'
+
 ---
 ## 任务书，中期报告
 任务书和中期报告等word文档放在doc的文件夹内。
