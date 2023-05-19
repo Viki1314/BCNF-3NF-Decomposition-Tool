@@ -34,6 +34,7 @@ function reflexiveItem_is_subset_of_newF(item, F){
 
 }
 
+
 /**
  * @description 此函数通过reflexive rule来计算F+
  * @param {array} R - 关系模式
@@ -42,10 +43,16 @@ function reflexiveItem_is_subset_of_newF(item, F){
  */
 function reflexiveRule(R, F) {
   const newF = [...F];
-  for (const attribute of R) {
-    reflexiveItem = [[attribute],[attribute]];
-    if (! reflexiveItem_is_subset_of_newF(reflexiveItem,newF)) {
-      newF.push([[attribute], [attribute]]);
+  for(const [alpha,beta] of F){
+    alphaSubsets = getSubsets(alpha);
+    for (subset of alphaSubsets){
+      //判断非空
+      if (subset.length !== 0){
+          const reflexiveItem = [alpha,subset];
+          if(! reflexiveItem_is_subset_of_newF(reflexiveItem,newF)){
+          newF.push(reflexiveItem);
+        }
+      }
     }
   }
   return newF;
@@ -158,27 +165,31 @@ console.log('F+ after transitivity rule ',F_new,'\n')
  * @returns {array} 返回应用Armstrong Axioms后的F+
  */
 function calculateFunctionDependencyClosureSetByArmstrongAxioms(R, F){
-    F = reflexiveRule(R, F);
-    F = augmentationRule(R, F);
     let FOriginal = [...F];
     while(true){
-        F = transitivityRule(R, F);
-        if (JSON.stringify(F) === JSON.stringify(FOriginal)) {
-            break;
-        } else {
-            FOriginal = [...F];
-        }
+      F = reflexiveRule(R, F);
+      F = augmentationRule(R, F);
+      F = transitivityRule(R, F);
+      if (JSON.stringify(F) === JSON.stringify(FOriginal)) {
+          break;
+      } else {
+          FOriginal = [...F];
+      }
     }
     F.sort();
     return F;
-    }
+}
 
 //测试Armstrong axioms
 R = ['A','B','C','G','H','I']
 F = [[['A'],['B']], [['A'],['C']], [['C','G'],['H']], [['C','G'],['I']], [['B'],['H']]]
 F_new = calculateFunctionDependencyClosureSetByArmstrongAxioms(R,F)
-for (let i in F_new){
-  console.log(F_new[i]);
-}
+////如果要输出F_new的全部，就用for循环
+// for (let i in F_new){
+//   console.log(F_new[i]);
+// }
+console.log(F_new,length);
+//否则输出会省略掉部分
+console.log(F_new);
 
 
