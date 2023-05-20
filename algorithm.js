@@ -2,7 +2,7 @@
 
 /* 基本函数——罗云扬*/
 
-//attributeClosureSet.js
+//attributeClosureSet.js----------------------------------------------------------------------------------------------------------------------------------------------------------
 // R = ['A','B','C','D','E','F']
 // F = [[['A'],['B']],[['B'],['C','D']],[['D'],['E']],[['C','E'],['F']]]
 
@@ -280,7 +280,7 @@ function calculateCandidateKeySet(R, F){
 // candidateKeySet = calculateCandidateKeySet(R,F);
 // console.log('candidate key set is ',candidateKeySet,'\n');
 
-//canonicalCoverSet.js
+//canonicalCoverSet.js---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // R = ['A','B','C','D','E','F']
 
@@ -515,7 +515,7 @@ function computeCanonicalCoverSet(F){
 // canonicalCoverF = computeCanonicalCoverSet(F);
 // console.log('canonical cover set F is',canonicalCoverF,'\n');
 
-//functionDependencyClosureSet.js
+//functionDependencyClosureSet.js---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // R = ['A','B','C','D','E','F']
 
