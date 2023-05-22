@@ -521,16 +521,17 @@ for (var i =1;i<length;i++){
 var bcnf = BCNF(R,F,true);
 var result = bcnf[0];
 var step = bcnf[1];
-console.log(result);
-console.log('\n\n result-----\n',step);
-console.log(step.constructor);
+
+console.log('\n\n result-----\n','BC分解结果：',result);
+console.log('分解过程：\n',step);
+// console.log(step.constructor);
 
 console.log('------false-------');
 var bcnf_1 = BCNF(R,F,false);
 var result_1 = bcnf_1[0];
 var step_1 = bcnf_1[1];
-console.log('\n\n result_false-----\n',result_1);
-console.log(step_1);
+console.log('\n\n result_false-----\n','BC分解结果：',result_1);
+console.log('分解过程：\n',step_1);
 // console.log(step_1['right']['right']);
 // console.log(step.constructor);
 //
