@@ -863,7 +863,7 @@ function check_schemaInBCNF(schemaR,F){
          return R;
      }
  }
-//  F=[[[1,2],[3,4]],[[2],[3]],[[1,3],[2]]]
-//  R=[1,2,3,4]
-//  console.log(ThreeNF(F,R) )
+ F=[[[1,2],[3,4]],[[2],[3]],[[1,3],[2]]]
+ R=[1,2,3,4]
+ console.log(ThreeNF(F,R) )
 
