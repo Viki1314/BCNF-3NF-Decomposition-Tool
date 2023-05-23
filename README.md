@@ -37,13 +37,15 @@ git pull
 
 ![Image2_load2](./readme_Image/load2.png "load2")
 ———————————————————————————————————
-## 算法文件algorithm.js
+## 算法文件algorithm.js  
+2023/5/19：所有js函数已整合进 'DataBase\miniprogram-8\algorithm.js'  
 
+2023.05.23  上次复制到algorithm.js的代码已经整合完毕。删除了冗余的函数。  
+删除掉的函数如下图。  
+![Image2_algorithm_combine_delete](./readme_Image/algorithm_combine_delete.png "algorithm_combine_delete")
 ## 3NF部分的js算法文件ThreeNF.js
 2023.05.16已导入（v1.0）  
 该文件上半部分为preparation，下半部分为3NF的算法实现。  
-
-2023/5/19：所有js函数已整合进 'DataBase\miniprogram-8\algorithm.js'
 
 ---
 ## 任务书，中期报告
