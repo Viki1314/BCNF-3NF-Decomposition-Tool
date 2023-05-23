@@ -287,6 +287,27 @@ function beta_is_subset_of_newClosure(listA, listB) {
   }
 
 
+ /**
+ * @description 此函数用来判断list A是不是list B的子集
+ * @param {array} listA - A list
+ * @param {array} listB - B list
+ * @returns {bool} 如果A为B的子集，返回true; 反之返回false 
+ */
+function isArraySubset(listA, listB) {
+    if(listA.length===0){
+      return true;
+    }
+    for(i=0;i<listA.length;++i){
+      if(! listB.includes(listA[i])){
+          //console.log(listA[i]);
+          return false;
+      }
+    }
+    return true;
+  //   console.log()
+  //   return listA.every(elem => listB.includes(elem));
+  } 
+
 /**
  * @description 此函数用来去除左侧的extraneous attribute
  * @param {array} unionF - 经过union处理后的F
