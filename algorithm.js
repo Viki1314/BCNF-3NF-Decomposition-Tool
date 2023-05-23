@@ -544,12 +544,6 @@ function isdisjoint(alpha_set,beta_set){
  * @returns Boolean,True:符合BC范式；False：违背BC范式
  */
 function check_NontrivialDependencyCaseViolationOfBCNF(s,schemaR,F){
-      /*
-      description:检查不常用（non-trivial）依赖s是否导致不符合BCNF
-      :param s:F中的一个在schemaR上的非平凡依赖;ex:[['A'],['B']]
-          schemaR:list,表的属性;ex:['A','B','C','D','E','F']
-      :return:boolean,True:符合BC范式；False：违背BC范式
-      */
       var s_plus_set = new Set(calculateSingleAttributeClosure(s[0],F));
       // console.log(s,'s+:',s_plus_set);
       var R_set = new Set(schemaR);
@@ -568,19 +562,14 @@ function check_schemaInBCNF(schemaR,F){
       var result = true;
       var vio =[] ;
       for (i in F){
-          // console.log(i);
           var alpha_set = new Set(F[i][0]);
           var beta_set = new Set(F[i][1]);
-          // console.log('isSuperset(alpha_set,beta_set):',isSuperset(alpha_set,beta_set));
-          // console.log('union(alpha_set,beta_set):',union(alpha_set,beta_set));
-          // console.log('isSuperset(union(alpha_set,beta_set),set(schemaR)):',isSuperset(new Set(schemaR),union(alpha_set,beta_set)));
           // 保证该依赖是非平凡依赖且在Ri中，可以被分解
           if (!(isSuperset(alpha_set,beta_set)) &&  isSuperset(new Set(schemaR),union(alpha_set,beta_set))){
               // console.log(i,'\t',F[i],'\t',!(check_NontrivialDependencyCaseViolationOfBCNF(F[i],schemaR,F)));
               if (!(check_NontrivialDependencyCaseViolationOfBCNF(F[i],schemaR,F))){
                   vio = F[i];
                   result = false;
-                  // console.log(i);
                   break;
               }
           }
