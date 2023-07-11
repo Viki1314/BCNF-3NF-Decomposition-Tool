@@ -18,8 +18,8 @@ For details, see Software Demo, Part 6 of Final Report.pdf
 
 | Member  | School| Email| Work|
 | ------|-----|----|-------|
-| 罗云扬  |College of Future Technology, South China University of Technology  ||BCNF&3NF algorithm basic function code|
-| 李宇扬|College of Future Technology, South China University of Technology ||Wechat mini program front-end |
+| 罗云扬  |College of Future Technology, South China University of Technology  |1994743680@qq.com|BCNF&3NF algorithm basic function code|
+| 李宇扬|College of Future Technology, South China University of Technology |2664165096@qq.com|Wechat mini program front-end |
 | 李伟杰|College of Future Technology, South China University of Technology |vickyli200211@163.com|BCNF judgment and decomposition algorithm|
 | 全秦霄|College of Future Technology, South China University of Technology |ytmpqqx@163.com|3NF judgment and decomposition algorithm|
 
@@ -45,8 +45,8 @@ If you have any questions, please contact us by email
 
 | 成员  | 学校学院| 邮箱| 负责部分|
 | ------|-----|----|-------|
-| 罗云扬  |华南理工大学未来技术学院  ||BCNF&3NF算法基础函数代码|
-| 李宇扬|华南理工大学未来技术学院 ||小程序前端页面|
+| 罗云扬  |华南理工大学未来技术学院  |1994743680@qq.com|BCNF&3NF算法基础函数代码|
+| 李宇扬|华南理工大学未来技术学院 |2664165096@qq.com|小程序前端页面|
 | 李伟杰|华南理工大学未来技术学院 |vickyli200211@163.com|BCNF判断和分解算法|
 | 全秦霄|华南理工大学未来技术学院 |ytmpqqx@163.com|3NF判断和分解算法|
 
